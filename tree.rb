@@ -84,28 +84,28 @@ class Tree
     result
   end
 
-  def inorder(root = @root)
-    return if root.nil?
+  def inorder(array = [], root = @root)
+    return array if root.nil?
 
-    inorder(root.left)
-    puts root.data
-    inorder(root.right)
+    inorder(array, root.left)
+    array << root.data
+    inorder(array, root.right)
   end
 
-  def preorder(root = @root)
-    return if root.nil?
+  def preorder(array = [], root = @root)
+    return array if root.nil?
 
-    puts root.data
-    preorder(root.left)
-    preorder(root.right)
+    array << root.data
+    preorder(array, root.left)
+    preorder(array, root.right)
   end
 
-  def postorder(root = @root)
-    return if root.nil?
+  def postorder(array = [], root = @root)
+    return array if root.nil?
 
-    postorder(root.left)
-    preorder(root.right)
-    puts root.data
+    postorder(array, root.left)
+    postorder(array, root.right)
+    array << root.data
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -118,6 +118,6 @@ end
 test = Tree.new([1, 2, 3, 4, 5, 6, 7])
 test.insert(test.root, 8)
 test.pretty_print
-# p test.inorder
-# p test.preorder
+p test.inorder
+p test.preorder
 p test.postorder

@@ -5,9 +5,15 @@ class Tree
   require_relative 'node'
   attr_accessor :root
 
-  def initialize(array)
-    @root = build_tree(array)
-    pretty_print @root
+  def initialize(array = [])
+    if array.empty?
+      start
+      # @root = build_tree(start)
+      return
+    else
+      @root = build_tree(array)
+    end
+    pretty_print(@root)
   end
 
   def build_tree(array, start = 0, end_of_array = array.length - 1)
@@ -108,6 +114,62 @@ class Tree
     array << root.data
   end
 
+  def height(node = @root)
+    return 0 if node.nil?
+
+    left_side = height(node.left)
+    right_side = height(node.right)
+
+    left_side > right_side ? left_side + 1 : right_side + 1
+  end
+
+  def balanced?(node = @root)
+    return 0 if node.nil?
+
+    left_side = height(node.left)
+    right_side = height(node.right)
+
+    difference = left_side - right_side
+
+    difference.abs < 2
+  end
+
+  def rebalance(node = @root)
+    leveled_order_array = level_order(node)
+
+    @root = build_tree(leveled_order_array)
+  end
+
+  def start
+    array = Array.new(15) { rand(1..100) }
+    array = array.sort.uniq
+    initialize(array)
+    puts "\nLevel Order: #{level_order(@root)}"
+    array = []
+    puts "Preorder: #{preorder(array)}"
+    array = []
+    puts "Postorder: #{postorder(array)}"
+    array = []
+    puts "Inorder: #{inorder(array)}\n\n"
+    rand(1..20).times do
+      insert(@root, rand(1..100))
+    end
+    pretty_print(@root)
+    puts "\nBalanced Tree: #{balanced?(@root)}\n\n"
+    return if balanced?(@root)
+
+    rebalance(@root)
+    pretty_print(@root)
+    puts "\nNow it is balanced!\n"
+    puts "\nLevel Order: #{level_order(@root)}"
+    array = []
+    puts "Preorder: #{preorder(array)}"
+    array = []
+    puts "Postorder: #{postorder(array)}"
+    array = []
+    puts "Inorder: #{inorder(array)}\n\n"
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -115,9 +177,5 @@ class Tree
   end
 end
 
-test = Tree.new([1, 2, 3, 4, 5, 6, 7])
-test.insert(test.root, 8)
-test.pretty_print
-p test.inorder
-p test.preorder
-p test.postorder
+# test = Tree.new([1, 2, 3, 4, 5, 6, 7])
+test = Tree.new

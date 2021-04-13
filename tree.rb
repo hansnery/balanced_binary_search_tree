@@ -8,7 +8,6 @@ class Tree
   def initialize(array = [])
     if array.empty?
       start
-      # @root = build_tree(start)
       return
     else
       @root = build_tree(array)
